@@ -48,12 +48,13 @@
         <div class="hero-image-overlay"></div>
         <div class="container hero-content">
             <h1>Charitable Giving Made Strategic</h1>
-            <p>A modern approach to managing your charitable giving — thoughtfully, securely, and efficiently.</p>
+            <p>A Westwyn Ridge Charitable Giving Fund allows you to manage all your charitable giving from one secure account while maximizing your tax benefits.</p>
+            <p>Want to open a giving fund? Email us to get started.</p>
             <div class="hero-actions">
                 <a href="mailto:info@westwynridge.com?subject=Sign%20Up%20for%20a%20Westwyn%20Ridge%20Giving%20Fund"
-                    class="btn btn-teal btn-large">Open Your Giving Fund</a>
-                <a href="#" class="btn btn-white-outline btn-large">Sign In To Your Fund</a>
+                    class="btn btn-teal btn-large">Talk to an Advisor</a>
             </div>
+            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: rgba(255,255,255,0.8);">Already have a Westwyn Charitable Fund? <a href="#" style="color: var(--white); text-decoration: underline; font-weight: 500;">Log in here</a></p>
         </div>
     </section>
 
@@ -589,15 +590,17 @@
     <!-- Final CTA Banner -->
     <section class="cta-banner">
         <div class="container text-center">
-            <h2>Begin Your Giving Strategy</h2>
-            <p>Open your Westwyn Ridge Charitable Giving Fund today or sign in to manage your existing account.</p>
+            <h2>Ready to Open Your Giving Fund?</h2>
+            <p>Email us to get started and manage all your charitable giving from one secure account.</p>
             <div class="hero-actions" style="margin-top: 2rem;">
                 <a href="mailto:info@westwynridge.com?subject=Sign%20Up%20for%20a%20Westwyn%20Ridge%20Giving%20Fund"
-                    class="btn btn-teal btn-large">Open Your Giving Fund</a>
-                <a href="#" class="btn btn-white-outline btn-large">Sign In To Your Fund</a>
+                    class="btn btn-teal btn-large">Talk to an Advisor</a>
             </div>
+            <p style="margin-top: 1.5rem; font-size: 1rem; color: rgba(255,255,255,0.8);">Already have a Westwyn Charitable Fund? <a href="#" style="color: var(--white); text-decoration: underline; font-weight: 500;">Log in here</a></p>
         </div>
     </section>
+
+    <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.15); margin: 0;">
 
     <!-- Footer -->
     <footer class="site-footer">
@@ -628,6 +631,42 @@
         </div>
     </footer>
 
+    <!-- Pretend Email Modal -->
+    <div id="email-modal" class="email-modal">
+        <div class="email-modal-backdrop" onclick="closeEmailModal()"></div>
+        <div class="email-modal-content">
+            <div class="email-modal-header">
+                <div class="email-window-controls">
+                    <span class="control-btn close-btn" onclick="closeEmailModal()"></span>
+                    <span class="control-btn min-btn"></span>
+                    <span class="control-btn max-btn"></span>
+                </div>
+                <h3>New Message</h3>
+            </div>
+            <div class="email-modal-body">
+                <div class="email-field">
+                    <label>To:</label>
+                    <input type="text" id="email-to" readonly>
+                </div>
+                <div class="email-field">
+                    <label>Subject:</label>
+                    <input type="text" id="email-subject">
+                </div>
+                <div class="email-field email-message-container">
+                    <textarea id="email-message" placeholder="Write your message here..."></textarea>
+                </div>
+            </div>
+            <div class="email-modal-footer">
+                <button class="btn btn-teal" id="email-send-btn" onclick="simulateEmailSend()">
+                    <span class="send-icon">↗</span> Send
+                </button>
+                <div id="email-success-msg" class="email-success-msg" style="display: none;">
+                    Message sent to your advisor!
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // FAQ Accordion Script
         document.querySelectorAll('.accordion-header').forEach(button => {
@@ -656,6 +695,54 @@
         menuToggle.addEventListener('click', () => {
             mainNav.classList.toggle('active');
         });
+
+        // Email Modal Simulation
+        const emailModal = document.getElementById('email-modal');
+        const emailTo = document.getElementById('email-to');
+        const emailSubject = document.getElementById('email-subject');
+        const emailMessage = document.getElementById('email-message');
+        const sendBtn = document.getElementById('email-send-btn');
+        const successMsg = document.getElementById('email-success-msg');
+
+        document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const href = this.getAttribute('href');
+                const emailMatch = href.match(/mailto:([^?]+)/);
+                const subjectMatch = href.match(/subject=([^&]+)/);
+                
+                if (emailMatch) emailTo.value = emailMatch[1];
+                if (subjectMatch) emailSubject.value = decodeURIComponent(subjectMatch[1].replace(/\+/g, ' '));
+                
+                // Reset states
+                emailMessage.value = '';
+                sendBtn.style.display = 'inline-flex';
+                successMsg.style.display = 'none';
+                sendBtn.innerHTML = '<span class="send-icon">↗</span> Send';
+                sendBtn.disabled = false;
+                
+                emailModal.classList.add('active');
+            });
+        });
+
+        function closeEmailModal() {
+            emailModal.classList.remove('active');
+        }
+
+        function simulateEmailSend() {
+            sendBtn.innerHTML = 'Sending...';
+            sendBtn.disabled = true;
+            
+            setTimeout(() => {
+                sendBtn.style.display = 'none';
+                successMsg.style.display = 'flex';
+                
+                setTimeout(() => {
+                    closeEmailModal();
+                }, 2000);
+            }, 800);
+        }
     </script>
 </body>
 
